@@ -27,7 +27,8 @@ RUN cd /tmp && curl -k -L https://github.com/coreos/etcd/releases/download/v0.4.
 RUN cd /tmp && svn co --trust-server-cert --non-interactive -r 1618117 https://svn.apache.org/repos/asf/celix/trunk celix && \ 
 	mkdir celix/build && cd celix/build && \ 
 	cmake -DBUILD_DEPLOYMENT_ADMIN:BOOL=ON -DCMAKE_INSTALL_PREFIX:PATH=/usr .. && \ 
-	make all install 
+	make all install && \
+	cd /tmp && rm -fr celix
 
 # Node agent resources
 ADD resources /tmp
