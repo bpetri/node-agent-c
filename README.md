@@ -9,6 +9,10 @@ Run an INAETICS Node Agent as a CoreOS/Docker service.
     RUN docker build -t inaetics/celix-node-agent celix-node-agent-service
     RUN docker run -d inaetics/celix-node-agent
 
+    [optional]
+    if a inaetics/node-provision image is running under the container name provisioning, do
+    RUN docker run --link=provisioning:provisioning -d inaetics/celix-node-agent
+
 
 
 #TODO

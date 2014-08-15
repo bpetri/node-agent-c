@@ -34,8 +34,8 @@ fi
 if [ -z "${PROVISIONING_URL}" ] 
 then
 	echo "Cannot find provisioning server in the etcd dir /inaetics/node-provisioning-service"
-	echo "Using default ace server localhost:8080"
-	echo "deployment_admin_url=http://localhost:8080" >> /tmp/celix-workdir/config.properties
+	echo "Using default ace server provisioning:8080"
+	echo "deployment_admin_url=http://provisioning:8080" >> /tmp/celix-workdir/config.properties
 else 
 	echo "Using provisioning server ${PROVISIONING_URL}"
 	echo "deployment_admin_url=${PROVISIONING_URL}" >> /tmp/celix-workdir/config.properties
