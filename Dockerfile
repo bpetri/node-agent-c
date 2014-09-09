@@ -16,6 +16,7 @@ RUN apt-get update && apt-get upgrade -yq && apt-get install -yq --no-install-re
   libjansson-dev \
   libcurl4-openssl-dev \
   cmake \ 
+  socat \
   git && apt-get clean
 
 ##ETCDCTL_INSTALL - instruct builder to install etcdctl
@@ -27,7 +28,7 @@ RUN cd /tmp && curl -k -L https://github.com/coreos/etcd/releases/download/v0.4.
 RUN cd /tmp && svn co --trust-server-cert --non-interactive -r 1618117 https://svn.apache.org/repos/asf/celix/trunk celix && \ 
 	mkdir celix/build && cd celix/build && \ 
 	cmake -DBUILD_DEPLOYMENT_ADMIN:BOOL=ON -DCMAKE_INSTALL_PREFIX:PATH=/usr .. && \ 
-	make all install && \
+	make all install-all && \
 	cd /tmp && rm -fr celix
 
 # Node agent resources
