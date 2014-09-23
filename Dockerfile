@@ -15,8 +15,10 @@ RUN apt-get update && apt-get upgrade -yq && apt-get install -yq --no-install-re
   subversion \
   libjansson-dev \
   libcurl4-openssl-dev \
+  libxml2-dev \
   cmake \ 
   socat \
+  screen \
   git && apt-get clean
 
 ##ETCDCTL_INSTALL - instruct builder to install etcdctl
@@ -25,9 +27,9 @@ RUN cd /tmp && curl -k -L https://github.com/coreos/etcd/releases/download/v0.4.
 	cp etcd-v0.4.6-linux-amd64/etcd /bin/ && cp etcd-v0.4.6-linux-amd64/etcdctl /bin/ 
 
 #Install celix
-RUN cd /tmp && svn co --trust-server-cert --non-interactive -r 1618117 https://svn.apache.org/repos/asf/celix/trunk celix && \ 
+RUN cd /tmp && svn co --trust-server-cert --non-interactive -r 1626787 https://svn.apache.org/repos/asf/celix/trunk celix && \ 
 	mkdir celix/build && cd celix/build && \ 
-	cmake -DBUILD_DEPLOYMENT_ADMIN:BOOL=ON -DCMAKE_INSTALL_PREFIX:PATH=/usr .. && \ 
+	cmake -DBUILD_DEPLOYMENT_ADMIN:BOOL=ON -DBUILD_REMOTE_SERVICE_ADMIN:BOOL=ON -DBUILD_RSA_BUNDLES_DISCOVERY_BONJOUR:BOOL=OFF -DBUILD_RSA_BUNDLES_DISCOVERY_SLP:BOOL=OFF -DCMAKE_INSTALL_PREFIX:PATH=/usr .. && \ 
 	make all install-all && \
 	cd /tmp && rm -fr celix
 
