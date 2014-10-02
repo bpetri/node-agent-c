@@ -13,6 +13,11 @@ cleanup() {
 
 trap cleanup SIGHUP SIGINT SIGTERM
 
+HOST_IP=$2
+MAX_RETRY_ETCD_REPO=10
+RETRY_ETCD_REPO_INTERVAL=5
+DISCOVERY_PATH="org.apache.celix.discovery.etcd"
+
 etcd &
 ETCD_PID=$!
 sleep 1
@@ -22,13 +27,29 @@ cp /tmp/config.properties.base /tmp/celix-workdir/config.properties
 DEPLOYMENT_ID=$(hostname)
 echo "deployment_admin_identification=${DEPLOYMENT_ID}" >> /tmp/celix-workdir/config.properties
 
-echo "Retreiving provisioning server url from etcd"
-PROVISIONING_ETCD_PATH=$(etcdctl ls /inaetics/node-provisioning-service | head -n 1)
-if [ $? -eq 0 ] 
-then 
-	PROVISIONING_URL=$(etcdctl get ${PROVISIONING_ETCD_PATH})
+echo "Retrieving provisioning server url from etcd"
+PROVISIONING_ETCD_PATH=""
+PROVISIONING_ETCD_PATH_FOUND=0
+RETRY=1
+while [ $RETRY -le $MAX_RETRY_ETCD_REPO ] && [ $PROVISIONING_ETCD_PATH_FOUND -eq 0 ]
+do
+
+    PROVISIONING_ETCD_PATH=$(etcdctl ls /inaetics/node-provisioning-service | head -n 1)
+
+    if [ $? -ne 0 ]; then
+        echo "Tentative $RETRY of retrieving Provisioning Server from etcd failed. Retrying..."
+        ((RETRY+=1))
+        sleep $RETRY_ETCD_REPO_INTERVAL
+    else
+        echo "Found valid Provisioning Server Repository in etcd"
+        PROVISIONING_ETCD_PATH_FOUND=1
+    fi
+done
+
+if [ $PROVISIONING_ETCD_PATH_FOUND -eq 1 ]; then
+    PROVISIONING_URL=$(etcdctl get ${PROVISIONING_ETCD_PATH})
 else 
-	echo "Cannot find dir /inaetics/node-provisioning-service in etcd"
+    echo "Cannot find dir /inaetics/node-provisioning-service in etcd"
 fi
 
 if [ -z "${PROVISIONING_URL}" ] 
@@ -41,7 +62,11 @@ else
 	echo "deployment_admin_url=${PROVISIONING_URL}" >> /tmp/celix-workdir/config.properties
 fi 
 
+# needed for discovery_etcd
+echo "RSA_IP=$HOST_IP" >> /tmp/celix-workdir/config.properties
+echo "DISCOVERY_ETCD_SERVER_IP=`echo $ETCDCTL_PEERS | cut -d ':' -f 1`" >> /tmp/celix-workdir/config.properties
+echo "DISCOVERY_ETCD_SERVER_PORT=`echo $ETCDCTL_PEERS | cut -d ':' -f 2`" >> /tmp/celix-workdir/config.properties
+echo "DISCOVERY_CFG_POLL_ENDPOINTS=http://$HOST_IP:9999/$DISCOVERY_PATH" >> /tmp/celix-workdir/config.properties
+
 cd /tmp/celix-workdir
-celix &
-CELIX_PID=$!
-wait ${CELIX_PID}
+celix
