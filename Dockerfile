@@ -28,7 +28,7 @@ RUN cd /tmp && curl -k -L https://github.com/coreos/etcd/releases/download/v0.4.
 	cp etcd-v0.4.6-linux-amd64/etcd /bin/ && cp etcd-v0.4.6-linux-amd64/etcdctl /bin/ 
 
 #Install celix
-RUN cd /tmp && svn co --trust-server-cert --non-interactive -r 1632567 https://svn.apache.org/repos/asf/celix/trunk celix && svn co --trust-server-cert --non-interactive -r 1628260  https://svn.apache.org/repos/asf/celix/trunk/deployment_admin/private/src celix/deployment_admin/private/src && \
+RUN cd /tmp && svn co --trust-server-cert --non-interactive -r 1633061 https://svn.apache.org/repos/asf/celix/trunk celix && svn co --trust-server-cert --non-interactive -r 1628260  https://svn.apache.org/repos/asf/celix/trunk/deployment_admin/private/src celix/deployment_admin/private/src && \
 	mkdir celix/build && cd celix/build && \ 
 	cmake -DBUILD_DEPLOYMENT_ADMIN:BOOL=ON -DBUILD_REMOTE_SERVICE_ADMIN:BOOL=ON -DBUILD_RSA_BUNDLES_DISCOVERY_BONJOUR:BOOL=OFF -DBUILD_RSA_BUNDLES_DISCOVERY_SLP:BOOL=OFF -DCMAKE_INSTALL_PREFIX:PATH=/usr .. && \ 
 	make all install-all && \
