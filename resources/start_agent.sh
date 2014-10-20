@@ -14,7 +14,7 @@ cleanup() {
 trap cleanup SIGHUP SIGINT SIGTERM
 
 HOST_IP=$2
-MAX_RETRY_ETCD_REPO=10
+MAX_RETRY_ETCD_REPO=60
 RETRY_ETCD_REPO_INTERVAL=5
 DISCOVERY_PATH="org.apache.celix.discovery.etcd"
 
@@ -34,14 +34,14 @@ RETRY=1
 while [ $RETRY -le $MAX_RETRY_ETCD_REPO ] && [ $PROVISIONING_ETCD_PATH_FOUND -eq 0 ]
 do
 
-    PROVISIONING_ETCD_PATH=$(etcdctl ls /inaetics/node-provisioning-service | head -n 1)
+    PROVISIONING_ETCD_PATH=$(etcdctl ls /inaetics/node-provisioning-service | head -n 1; exit ${PIPESTATUS[0]})
 
     if [ $? -ne 0 ]; then
         echo "Tentative $RETRY of retrieving Provisioning Server from etcd failed. Retrying..."
         ((RETRY+=1))
         sleep $RETRY_ETCD_REPO_INTERVAL
     else
-        echo "Found valid Provisioning Server Repository in etcd"
+        echo "Found valid Provisioning Server Repository in etcd: ${PROVISIONING_ETCD_PATH}"
         PROVISIONING_ETCD_PATH_FOUND=1
     fi
 done
@@ -64,9 +64,10 @@ fi
 
 # needed for discovery_etcd
 echo "RSA_IP=$HOST_IP" >> /tmp/celix-workdir/config.properties
+echo "DISCOVERY_ETCD_ROOT_PATH=inaetics/discovery"  >> /tmp/celix-workdir/config.properties
 echo "DISCOVERY_ETCD_SERVER_IP=`echo $ETCDCTL_PEERS | cut -d ':' -f 1`" >> /tmp/celix-workdir/config.properties
 echo "DISCOVERY_ETCD_SERVER_PORT=`echo $ETCDCTL_PEERS | cut -d ':' -f 2`" >> /tmp/celix-workdir/config.properties
-echo "DISCOVERY_CFG_POLL_ENDPOINTS=http://$HOST_IP:9999/$DISCOVERY_PATH" >> /tmp/celix-workdir/config.properties
+echo "DISCOVERY_CFG_SERVER_IP=$HOST_IP" >> /tmp/celix-workdir/config.properties
 
 cd /tmp/celix-workdir
 celix
