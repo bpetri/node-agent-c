@@ -4,12 +4,13 @@
 require 'fileutils'
 Vagrant.require_version ">= 1.6.0"
 
-$instance_name="celix-node-agent-service-%02d"
-$instance_ip="172.17.8.2%02d"
+$instance_name="celix-agent-%02d"
+$instance_ip="172.17.8.22%01d"
 $num_instances = 2
 
-$coreos_channel="coreos-alpha"
-#$coreos_version=">= 361.0.0"
+$coreos_channel="alpha"
+$coreos_name="coreos-" + $coreos_channel 
+$coreos_version=">= 361.0.0"
 
 $virtualbox_gui = false
 $virtualbox_memory = 512
@@ -17,10 +18,9 @@ $virtualbox_cpus = 1
 
 Vagrant.configure("2") do |config|
 
-
-  config.vm.box = $coreos_channel
+  config.vm.box = $coreos_name
   config.vm.box_version = $coreos_version
-  config.vm.box_url = "http://alpha.release.core-os.net/amd64-usr/current/coreos_production_vagrant.json"
+  config.vm.box_url = "http://" + $coreos_channel + ".release.core-os.net/amd64-usr/current/coreos_production_vagrant.json"
 
   (1..$num_instances).each do |i|
 
@@ -29,18 +29,28 @@ Vagrant.configure("2") do |config|
       config.vm.hostname = vm_name
       config.vm.network :private_network, ip: $instance_ip % i
       if i == 1
-	config.vm.network "forwarded_port", guest: 7776, host: 7776
-	config.vm.network "forwarded_port", guest: 9998, host: 9998
+       config.vm.network "forwarded_port", guest: 7776, host: 7776
+       config.vm.network "forwarded_port", guest: 9998, host: 9998
       else
-	config.vm.network "forwarded_port", guest: 7777, host: 7777
-	config.vm.network "forwarded_port", guest: 9999, host: 9999
+       config.vm.network "forwarded_port", guest: 7777, host: 7777
+       config.vm.network "forwarded_port", guest: 9999, host: 9999
       end
 
       config.vm.provider :virtualbox do |virtualbox|
+        # virtualbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+        # virtualbox.customize ["setextradata", :id, "VBoxInternal/Devices/e1000/0/LUN#0/Config/HostResolverMappings/docker_repository/HostIP", "172.17.8.120"]
+        # virtualbox.customize ["setextradata", :id, "VBoxInternal/Devices/e1000/0/LUN#0/Config/HostResolverMappings/docker_repository/HostNamePattern", "dockerregistry"]
         virtualbox.gui = $virtualbox_gui
         virtualbox.memory = $virtualbox_memory
         virtualbox.cpus = $virtualbox_cpus
       end
+
+      # Provision service with nfs
+      # config.vm.synced_folder ".", "/mnt/node-agent-service", id: "node-agent-service", :nfs => true, :mount_options => ['nolock,vers=3,udp']
+
+      # Provision service with shell
+      # config.vm.provision :file, :source => ".", :destination => "/tmp/node-agent-service"
+      # config.vm.provision :shell, :inline => "rm -rf /var/lib/node-agent-service; mv /tmp/node-agent-service /var/lib/node-agent-service", :privileged => true
 
       config.vm.provision :file, :source => "coreos-userdata", :destination => "/tmp/vagrantfile-user-data"
       config.vm.provision :shell, :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/", :privileged => true
