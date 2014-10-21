@@ -22,6 +22,7 @@ etcd &
 ETCD_PID=$!
 sleep 1
 
+mkdir -p /tmp/celix-workdir
 cp /tmp/config.properties.base /tmp/celix-workdir/config.properties
 
 DEPLOYMENT_ID=$(hostname)
