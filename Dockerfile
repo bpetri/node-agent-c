@@ -22,7 +22,6 @@ RUN apt-get update && apt-get upgrade -yq && apt-get install -yq --no-install-re
   gdb  \
   git && apt-get clean
 
-##ETCDCTL_INSTALL - instruct builder to install etcdctl
 #RUN cd /tmp && git config --global http.sslVerify false && git clone https://github.com/coreos/etcd && cd etcd && ./build
 RUN cd /tmp && curl -k -L https://github.com/coreos/etcd/releases/download/v0.4.6/etcd-v0.4.6-linux-amd64.tar.gz | tar xzf - && \
 	cp etcd-v0.4.6-linux-amd64/etcd /bin/ && cp etcd-v0.4.6-linux-amd64/etcdctl /bin/ 
