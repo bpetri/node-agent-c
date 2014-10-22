@@ -1,10 +1,6 @@
 #!/bin/bash
 
 cleanup() {
-	if [ -n "${ETCD_PID}" ] 
-	then
-		kill ${ETCD_PID}
-	fi
 	if [ -n "${CELIX_PID}" ] 
 	then
 		kill ${CELIX_PID}
@@ -17,10 +13,6 @@ HOST_IP=$2
 MAX_RETRY_ETCD_REPO=60
 RETRY_ETCD_REPO_INTERVAL=5
 DISCOVERY_PATH="org.apache.celix.discovery.etcd"
-
-etcd &
-ETCD_PID=$!
-sleep 1
 
 mkdir -p /tmp/celix-workdir
 cp /tmp/config.properties.base /tmp/celix-workdir/config.properties
