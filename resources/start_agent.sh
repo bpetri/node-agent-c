@@ -9,6 +9,7 @@ cleanup() {
 
 trap cleanup SIGHUP SIGINT SIGTERM
 
+DEPLOYMENT_ID=$1
 HOST_IP=$2
 MAX_RETRY_ETCD_REPO=60
 RETRY_ETCD_REPO_INTERVAL=5
@@ -17,7 +18,6 @@ DISCOVERY_PATH="org.apache.celix.discovery.etcd"
 mkdir -p /tmp/celix-workdir
 cp /tmp/config.properties.base /tmp/celix-workdir/config.properties
 
-DEPLOYMENT_ID=$(hostname)
 echo "deployment_admin_identification=${DEPLOYMENT_ID}" >> /tmp/celix-workdir/config.properties
 
 echo "Retrieving provisioning server url from etcd"
