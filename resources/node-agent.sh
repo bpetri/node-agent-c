@@ -108,6 +108,7 @@ start_agent () {
   echo "deployment_admin_identification=${agent_id}" >> ${workdir}/config.properties
   echo "deployment_admin_url=${current_provisioning_service}" >> ${workdir}/config.properties
   echo "RSA_IP=$agent_ipv4" >> ${workdir}/config.properties
+  echo "DISCOVERY_ETCD_TTL=60" >> ${workdir}/config.properties
   echo "DISCOVERY_ETCD_ROOT_PATH=inaetics/discovery" >> ${workdir}/config.properties
   echo "DISCOVERY_ETCD_SERVER_IP=`echo $DISCOVERY_ETCD_SERVER_IP`" >> ${workdir}/config.properties
   echo "DISCOVERY_ETCD_SERVER_PORT=`echo $DISCOVERY_ETCD_SERVER_PORT`" >> ${workdir}/config.properties
@@ -117,7 +118,7 @@ start_agent () {
   echo "NODE_DISCOVERY_ETCD_SERVER_IP=`echo $DISCOVERY_ETCD_SERVER_IP`" >> ${workdir}/config.properties
   echo "NODE_DISCOVERY_ETCD_ROOT_PATH=inaetics/wiring" >> ${workdir}/config.properties
   echo "NODE_DISCOVERY_NODE_WA_ADDRESS=$agent_ipv4" >> ${workdir}/config.properties
- 
+  echo "NODE_DISCOVERY_NODE_WA_PORT=8888" >> ${workdir}/config.properties
 _log "CELIX Configuration"
   _log "================================================="
   _log "RSA IP s		   : $agent_ipv4"
