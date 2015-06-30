@@ -102,13 +102,28 @@ start_agent () {
   mkdir -p ${workdir}
 
   cp /tmp/config.properties.base ${workdir}/config.properties
+  DISCOVERY_ETCD_SERVER_IP=`echo $ETCDCTL_PEERS | cut -d ':' -f 1`
+  DISCOVERY_ETCD_SERVER_PORT=`echo $ETCDCTL_PEERS | cut -d ':' -f 2`
+ 
   echo "deployment_admin_identification=${agent_id}" >> ${workdir}/config.properties
   echo "deployment_admin_url=${current_provisioning_service}" >> ${workdir}/config.properties
   echo "RSA_IP=$agent_ipv4" >> ${workdir}/config.properties
+  echo "DISCOVERY_ETCD_TTL=60" >> ${workdir}/config.properties
   echo "DISCOVERY_ETCD_ROOT_PATH=inaetics/discovery" >> ${workdir}/config.properties
-  echo "DISCOVERY_ETCD_SERVER_IP=`echo $ETCDCTL_PEERS | cut -d ':' -f 1`" >> ${workdir}/config.properties
-  echo "DISCOVERY_ETCD_SERVER_PORT=`echo $ETCDCTL_PEERS | cut -d ':' -f 2`" >> ${workdir}/config.properties
+  echo "DISCOVERY_ETCD_SERVER_IP=`echo $DISCOVERY_ETCD_SERVER_IP`" >> ${workdir}/config.properties
+  echo "DISCOVERY_ETCD_SERVER_PORT=`echo $DISCOVERY_ETCD_SERVER_PORT`" >> ${workdir}/config.properties
   echo "DISCOVERY_CFG_SERVER_IP=$agent_ipv4" >> ${workdir}/config.properties
+  echo "LOGHELPER_ENABLE_STDOUT_FALLBACK=true" >> ${workdir}/config.properties
+  echo "NODE_DISCOVERY_ZONE_IDENTIFIER=zone1" >> ${workdir}/config.properties
+  echo "NODE_DISCOVERY_ETCD_SERVER_IP=`echo $DISCOVERY_ETCD_SERVER_IP`" >> ${workdir}/config.properties
+  echo "NODE_DISCOVERY_ETCD_ROOT_PATH=inaetics/wiring" >> ${workdir}/config.properties
+  echo "NODE_DISCOVERY_NODE_WA_ADDRESS=$agent_ipv4" >> ${workdir}/config.properties
+  echo "NODE_DISCOVERY_NODE_WA_PORT=8888" >> ${workdir}/config.properties
+_log "CELIX Configuration"
+  _log "================================================="
+  _log "RSA IP s		   : $agent_ipv4"
+  _log "DISCOVERY_ETCD_SERVER_IP   : $DISCOVERY_ETCD_SERVER_IP"
+  _log "DISCOVERY_ETCD_SERVER_PORT : $DISCOVERY_ETCD_SERVER_PORT"
 
   cd ${workdir}
   local cmd="celix"
