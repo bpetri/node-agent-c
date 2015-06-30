@@ -17,6 +17,7 @@ RUN apt-get update && apt-get upgrade -yq && apt-get install -yq --no-install-re
   libxml2-dev \
   cmake \ 
   gdb  \
+  git \
   && apt-get clean
 
 RUN cd /tmp && curl -k -L https://github.com/coreos/etcd/releases/download/v2.0.12/etcd-v2.0.12-linux-amd64.tar.gz | tar xzf - && \
