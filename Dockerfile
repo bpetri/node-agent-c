@@ -20,9 +20,8 @@ RUN apt-get update && apt-get upgrade -yq && apt-get install -yq --no-install-re
   gdb  \
   git && apt-get clean
 
-#RUN cd /tmp && git config --global http.sslVerify false && git clone https://github.com/coreos/etcd && cd etcd && ./build
-RUN cd /tmp && curl -k -L https://github.com/coreos/etcd/releases/download/v0.4.6/etcd-v0.4.6-linux-amd64.tar.gz | tar xzf - && \
-	cp etcd-v0.4.6-linux-amd64/etcd /bin/ && cp etcd-v0.4.6-linux-amd64/etcdctl /bin/ 
+RUN cd /tmp && curl -k -L https://github.com/coreos/etcd/releases/download/v2.0.12/etcd-v2.0.12-linux-amd64.tar.gz | tar xzf - && \
+	cp etcd-v2.0.12-linux-amd64/etcd /bin/ && cp etcd-v2.0.12-linux-amd64/etcdctl /bin/ 
 
 #Install celix
 ENV GIT_SSL_NO_VERIFY=true
