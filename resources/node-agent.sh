@@ -116,6 +116,7 @@ start_agent () {
   echo "LOGHELPER_ENABLE_STDOUT_FALLBACK=true" >> ${workdir}/config.properties
   echo "NODE_DISCOVERY_ZONE_IDENTIFIER=zone1" >> ${workdir}/config.properties
   echo "NODE_DISCOVERY_ETCD_SERVER_IP=`echo $DISCOVERY_ETCD_SERVER_IP`" >> ${workdir}/config.properties
+  echo "NODE_DISCOVERY_ETCD_SERVER_PORT=`echo $DISCOVERY_ETCD_SERVER_PORT`" >> ${workdir}/config.properties
   echo "NODE_DISCOVERY_ETCD_ROOT_PATH=inaetics/wiring" >> ${workdir}/config.properties
   echo "NODE_DISCOVERY_NODE_WA_ADDRESS=$agent_ipv4" >> ${workdir}/config.properties
   echo "NODE_DISCOVERY_NODE_WA_PORT=8888" >> ${workdir}/config.properties
