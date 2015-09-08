@@ -104,7 +104,7 @@ start_agent () {
   cp /tmp/config.properties.base ${workdir}/config.properties
   DISCOVERY_ETCD_SERVER_IP=`echo $ETCDCTL_PEERS | cut -d ':' -f 1`
   DISCOVERY_ETCD_SERVER_PORT=`echo $ETCDCTL_PEERS | cut -d ':' -f 2`
- 
+
   echo "deployment_admin_identification=${agent_id}" >> ${workdir}/config.properties
   echo "deployment_admin_url=${current_provisioning_service}" >> ${workdir}/config.properties
   echo "RSA_IP=$agent_ipv4" >> ${workdir}/config.properties
@@ -166,7 +166,7 @@ function store_etcd_data(){
 stop_agent () {
   etcd/rm "/inaetics/node-agent-service/$agent_id"
   if [ "$agent_pid" != "" ]; then
-    kill -SIGTERM $agent_pid
+      kill -SIGINT $agent_pid
       wait $agent_pid
       agent_pid=""
       rm -fr /tmp/workdir
@@ -204,7 +204,7 @@ fi
 
 agent_ipv4=$2
 if [ "$agent_ipv4" == "" ]; then
-  # get IP 
+  # get IP
   agent_ipv4=`hostname -i`
 fi
 if [ "$agent_ipv4" == "" ]; then
