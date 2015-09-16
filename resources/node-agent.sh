@@ -225,7 +225,7 @@ echo ok > /tmp/health
 while true; do
 
   # we are not healthy anymore when agent_pid is set but process is not running
-  if [ "$agent_pid" != "" ] && [ ! -d "/proc/$agent_pid" ] ; then
+  if [ "$agent_pid" != "" ] && [ ! -d "/proc/$agent_pid" ] && [ ! -e /tmp/disable_healthcheck ]; then
     # clean up and exit loop
     echo "agent process not running anymore, cleaning up..."
     clean_up
