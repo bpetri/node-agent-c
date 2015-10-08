@@ -1,0 +1,4 @@
+config BR2_PACKAGE_CELIX
+    bool "celix"
+    help
+      Celix server

@@ -1,0 +1,4 @@
+config BR2_PACKAGE_ETCD
+    bool "etcd"
+    help
+      Etcd server
