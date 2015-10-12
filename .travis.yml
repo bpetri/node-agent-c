@@ -6,10 +6,8 @@ services:
   - docker
 
 before_install:
-  - docker build -t inaetics/buildroot_basic buildroot_basic
-  - docker build -t bpetri/buildroot_minimum_celix buildroot_minimum_celix
-
-after_sucess:
   - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-  - docker push bpetri/buildroot_basic
-  - docker push bpetri/buildroot_minimum_celix
+
+install:
+  - docker build -t inaetics/buildroot_basic buildroot_basic && docker push bpetri/buildroot_basic
+  - docker build -t bpetri/buildroot_minimum_celix buildroot_minimum_celix && docker push bpetri/buildroot_minimum_celix
