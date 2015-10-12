@@ -1,5 +1,5 @@
 # Version 1.0
-FROM inaetics/buildroot_minimum_celix 
+FROM bpetri/buildroot_minimum_celix 
 MAINTAINER Gerrit Binnenmars "gerrit.binnenmars@nl.thalesgroup.com"
 
 ENV DEBIAN_FRONTEND noninteractive

@@ -1,5 +1,5 @@
 # Version 1.0
-FROM inaetics/buildroot_basic 
+FROM bpetri/buildroot_basic 
 MAINTAINER Florian GAUVIN "florian.gauvin@nl.thalesgroup.com"
 
 ENV DEBIAN_FRONTEND noninteractive
