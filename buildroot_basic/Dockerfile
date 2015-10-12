@@ -82,7 +82,7 @@ RUN sed -i -e 's/ZEROMQ_VERSION.*/ZEROMQ_VERSION = 3.2.5/' /usr/buildroot-2015.0
 ADD buildroot-configure-app-builder/.config /usr/buildroot-2015.05/
 WORKDIR /usr/buildroot-2015.05
 
-RUN make
+RUN make --silent
 
 #WORKDIR /usr/buildroot-2015.05/output/images
 #RUN mkdir /usr/app-builder-image && \
