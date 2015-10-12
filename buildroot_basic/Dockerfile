@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 #Download all the packages needed
 
-RUN apt-get -qq update && apt-get -qq -y install \
+RUN apt-get -qq update && apt-get -qq install \
 	build-essential \
 	cmake \
 	git \
@@ -36,6 +36,13 @@ RUN apt-get -qq update && apt-get -qq -y install \
 	libxt-dev \
         runit \
 	cmake \
+ 	apparmor \
+	aufs-tools \
+	cgroup-lite \
+	iptables \
+	libapparmor-perl \
+	libnfnetlink0 \
+	libxtables10 \
         && apt-get -qq clean 
 
 # Update CMAKE
