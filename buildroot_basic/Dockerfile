@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 #Download all the packages needed
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update -qq && apt-get install -qq -y \
 	build-essential \
 	cmake \
 	git \
