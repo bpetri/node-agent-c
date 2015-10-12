@@ -11,4 +11,5 @@ before_install:
 
 after_sucess:
   - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-  - docker push bpetri/buildtoor_minimum_celix
+  - docker push bpetri/buildroot_basic
+  - docker push bpetri/buildroot_minimum_celix
