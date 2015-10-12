@@ -59,7 +59,7 @@ command:help() {
         fi
     else
         cat >&2 <<ENDHELP
-usage: docker run inaetics/cagent_builder <command> <args> or
+usage: docker run bpetri/cagent_builder <command> <args> or
        cagent_build.sh <command> <args>
 
 Built-in commands cagent_builder.sh:
@@ -67,7 +67,7 @@ Built-in commands cagent_builder.sh:
      make_celix_agent        - builds a minimum celix docker image
      make_node_agent_bundles - builds set of bundles needed in every celix agent
 
-Built-in commands for "docker run inaetics/cagent_builder":
+Built-in commands for "docker run bpetri/cagent_builder":
      build_bundles           - compiles all bundles in directory and subdirectories
      build_script            - create cagent_builder.sh (Actually the only command that should
                                be called by the user)
@@ -80,21 +80,21 @@ ENDHELP
 # The following commands are running on the host, so outside the cagent_builder container
 command:make_celix_agent() {
 # Create the celix-agent, following should work but gives an unexpected EOF error in the docker daemon
-#docker run --name minimum_celix inaetics/buildroot_minimum_celix 
-#docker export minimum_celix | tar x usr/celix-image/rootfs.tar | docker import - inaetics/celix-agent 
+#docker run --name minimum_celix bpetri/buildroot_minimum_celix 
+#docker export minimum_celix | tar x usr/celix-image/rootfs.tar | docker import - bpetri/celix-agent 
 # So alternative solution
     mkdir -p /tmp/minimum_celix 
-#    docker run --rm -v /tmp/minimum_celix:/build ${USER_IDS} inaetics/buildroot_minimum_celix /bin/bash -c "cp /usr/celix-image/rootfs.tar /build"
-    docker run --rm -v /tmp/minimum_celix:/build inaetics/buildroot_minimum_celix chpst -u :$BUILDER_UID:$BUILDER_GID cp /usr/celix-image/rootfs.tar /build
-     cat /tmp/minimum_celix/rootfs.tar | docker import - inaetics/celix-agent
+#    docker run --rm -v /tmp/minimum_celix:/build ${USER_IDS} bpetri/buildroot_minimum_celix /bin/bash -c "cp /usr/celix-image/rootfs.tar /build"
+    docker run --rm -v /tmp/minimum_celix:/build bpetri/buildroot_minimum_celix chpst -u :$BUILDER_UID:$BUILDER_GID cp /usr/celix-image/rootfs.tar /build
+     cat /tmp/minimum_celix/rootfs.tar | docker import - bpetri/celix-agent
 #    rm -rf /tmp/minimum_celix
 }
 
 #command:build() {
 #    docker run -v /tmp/cagent:/build $FINAL_IMAGE /bin/bash -c "cp /usr/celix-image/rootfs.tar /build/."
-#    docker import - inaetics/celix-agent < /tmp/cagent/rootfs.tar
+#    docker import - bpetri/celix-agent < /tmp/cagent/rootfs.tar
 ##    service docker start
-##    docker import - inaetics/celix-agent < /usr/celix-image/rootfs.tar
+##    docker import - bpetri/celix-agent < /usr/celix-image/rootfs.tar
 #}
 
 help:make_bundles() {
@@ -116,7 +116,7 @@ command:make_bundles() {
     echo "set(CMAKE_SYSROOT \"/usr/buildroot-2015.05/output/host/usr/x86_64-buildroot-linux-gnu/sysroot\")" >> ./toolchain.cmake
     echo "set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} \"/usr/buildroot-2015.05/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/share/celix/cmake/modules\")" >> ./toolchain.cmake
     echo "include(/usr/buildroot-2015.05/output/host/usr/share/buildroot/toolchainfile.cmake)" >> ./toolchain.cmake
-    # Start docker run inaetics/cagent_builder with command to run cmake
+    # Start docker run bpetri/cagent_builder with command to run cmake
     cd ..
     docker run --rm -v $PWD:/build ${USER_IDS} $FINAL_IMAGE build_bundles
     # Copy the resulting bundles to ...
@@ -149,7 +149,7 @@ command:build_bundles() {
 }
 
 command:build_script() {
-    cat /usr/inaetics/cagent_builder.sh
+    cat /usr/bpetri/cagent_builder.sh
     exit 0
 }
 
@@ -160,7 +160,7 @@ command:build_agent_bundles() {
 }
 
 
-FINAL_IMAGE="inaetics/cagent_builder"
+FINAL_IMAGE="bpetri/cagent_builder"
 BUILDER_UID=$( id -u )
 BUILDER_GID=$( id -g )
 USER_IDS="-e BUILDER_UID=$( id -u ) -e BUILDER_GID=$( id -g )"
@@ -184,7 +184,7 @@ case $1 in
           command:$1 "${@:2}" # skip first element array
           exit $?
       else
-          docker run --rm -i -t -v $PWD:/build --entrypoint=$1 inaetics/cagent_builder ${@:2}
+          docker run --rm -i -t -v $PWD:/build --entrypoint=$1 bpetri/cagent_builder ${@:2}
       fi
       ;;
 esac
