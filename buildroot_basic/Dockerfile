@@ -37,7 +37,7 @@ RUN apt-get update -qq && apt-get install -qq -y \
         runit \
         && apt-get clean 
 # Update CMAKE
-RUN mkdir /cmake && cd /cmake && wget http://www.cmake.org/files/v3.2/cmake-3.2.2.tar.gz && tar xf cmake-3.2.2.tar.gz && cd cmake-3.2.2 && ./configure --prefix=/usr && make && make install
+RUN mkdir /cmake && cd /cmake && wget -nv http://www.cmake.org/files/v3.2/cmake-3.2.2.tar.gz && tar xf cmake-3.2.2.tar.gz && cd cmake-3.2.2 && ./configure --prefix=/usr && make && make install
 
 #Download and install the latest version of Docker (You need to be the same version to use this Dockerfile)
 RUN wget -qO- https://get.docker.com/ | sh
@@ -46,7 +46,7 @@ RUN wget -qO- https://get.docker.com/ | sh
 
 WORKDIR /usr
 
-RUN wget http://git.buildroot.net/buildroot/snapshot/buildroot-2015.05.tar.gz && \
+RUN wget -nv http://git.buildroot.net/buildroot/snapshot/buildroot-2015.05.tar.gz && \
 	tar -xf buildroot-2015.05.tar.gz && \
         echo "HOST_FAKEROOT_CONF_OPTS += --with-ipc=tcp" >> /usr/buildroot-2015.05/package/fakeroot/fakeroot.mk && \
         echo 'source "package/etcd/Config.in"' >> /usr/buildroot-2015.05/Config.in

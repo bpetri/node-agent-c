@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 #Download all the packages needed
 RUN echo 'source "package/celix/Config.in"' >> /usr/buildroot-2015.05/Config.in &&\
-        wget https://github.com/apache/celix/archive/develop.tar.gz 
+        wget -nv https://github.com/apache/celix/archive/develop.tar.gz 
 
 #Add missing packages to the buildroot environment
 ADD extra_buildroot_packages/celix /usr/buildroot-2015.05/package/celix
