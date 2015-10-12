@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 #Download all the packages needed
 
-RUN apt-get update -qq && apt-get install -qq -y \
+RUN apt-get -qq update && apt-get -qq -y install \
 	build-essential \
 	cmake \
 	git \
@@ -35,9 +35,11 @@ RUN apt-get update -qq && apt-get install -qq -y \
 	libxtst-dev \
 	libxt-dev \
         runit \
-        && apt-get clean 
+	cmake \
+        && apt-get -qq clean 
+
 # Update CMAKE
-RUN mkdir /cmake && cd /cmake && wget -nv http://www.cmake.org/files/v3.2/cmake-3.2.2.tar.gz && tar xf cmake-3.2.2.tar.gz && cd cmake-3.2.2 && ./configure --prefix=/usr && make && make install
+#RUN mkdir /cmake && cd /cmake && wget -nv http://www.cmake.org/files/v3.2/cmake-3.2.2.tar.gz && tar xf cmake-3.2.2.tar.gz && cd cmake-3.2.2 && ./configure --prefix=/usr && make && make install
 
 #Download and install the latest version of Docker (You need to be the same version to use this Dockerfile)
 RUN wget -qO- https://get.docker.com/ | sh
