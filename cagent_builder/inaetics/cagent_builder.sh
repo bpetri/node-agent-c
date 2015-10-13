@@ -149,7 +149,7 @@ command:build_bundles() {
 }
 
 command:build_script() {
-    cat /usr/bpetri/cagent_builder.sh
+    cat /usr/inaetics/cagent_builder.sh
     exit 0
 }
 
