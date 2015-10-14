@@ -14,5 +14,5 @@ install:
   - ./cagent_builder.sh make_celix_agent
   - docker images
 after_success:
-  - docker push inaetics/celix_agent
+  - docker push bpetri/celix_agent
 
