@@ -14,6 +14,6 @@ before_install:
 install:
   - ./cagent_builder.sh make_celix_agent
 
-after_sucess:
+after_success:
   - docker push inaetics/celix_agent
 
